@@ -1,0 +1,12 @@
+velocity_helper:
+  check:
+    plugin_enabled: Plugin has enabled!
+    server_type: Discovered server.properties, but this plugin is just designed for Velocity proxy server!
+  command:
+    main: "!!{vc} Main command of the plugin. (show this page)"
+    main_enable: "!!{vc} enable Enable the plugin. (change and apply option: config.enabled to True)"
+  loader:
+    on_start: Starting config loader...
+    on_disabled: Plz enable this plugin by editing the config file and reload, or type !!vc enable instead.
+  permission_denied: Permission denied!
+  player_only: This command can be executed by player only!

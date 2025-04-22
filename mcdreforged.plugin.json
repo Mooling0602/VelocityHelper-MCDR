@@ -1,0 +1,18 @@
+{
+    "id": "velocity_helper",
+    "version": "0.0.1",
+    "name": "VelocityHelper",
+    "description": {
+        "en_us": "A helper for velocity running under MCDReforged.",
+        "zh_cn": "一个适用于MCDR环境的VC代理端助手."
+    },
+    "author": "Mooling0602",
+    "link": "https://github.com/Mooling0602/VelocityHelper-MCDR",
+    "dependencies": {
+        "mcdreforged": ">=2.14.1"
+    },
+    "entrypoint": "velocity_helper.entry",
+    "resources": [
+        "lang"
+    ]
+}

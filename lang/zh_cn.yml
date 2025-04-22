@@ -1,0 +1,12 @@
+velocity_helper:
+  check:
+    plugin_enabled: 插件已经启用！
+    server_type: 检出server.properties，但此插件仅适用于Velocity代理端！
+  command:
+    main: "!!{vc} 插件主命令（显示此页面）"
+    main_enable: "!!{vc} enable 启用插件（修改并应用配置项config.enabled为True）"
+  loader:
+    on_start: 正在启动配置加载器……
+    on_disabled: 请先启用此插件，你可以修改配置文件并重载插件，或使用!!vc enable指令
+  permission_denied: 权限不足！
+  player_only: 该命令只能由玩家执行！
