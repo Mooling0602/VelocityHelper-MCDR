@@ -4,6 +4,7 @@ import velocity_helper.runtime as rt
 from mcdreforged.api.all import *
 from velocity_helper.config import config_loader, command_loader
 from velocity_helper.utils import tr
+from velocity_helper.handler import VelocityChatHandler
 
 
 def on_load(server: PluginServerInterface, prev_module):
@@ -21,5 +22,6 @@ def on_load(server: PluginServerInterface, prev_module):
     from velocity_helper.command import command_register, set_server_for_command
     set_server_for_command(server)
     command_register(server)
+    server.register_server_handler(VelocityChatHandler())
 
 
