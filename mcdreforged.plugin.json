@@ -9,7 +9,8 @@
     "author": "Mooling0602",
     "link": "https://github.com/Mooling0602/VelocityHelper-MCDR",
     "dependencies": {
-        "mcdreforged": ">=2.14.1"
+        "mcdreforged": ">=2.14.1",
+        "connect_core": ">=0.1.9"
     },
     "entrypoint": "velocity_helper.entry",
     "resources": [

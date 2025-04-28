@@ -5,6 +5,8 @@ velocity_helper:
   command:
     main: "!!{vc} 插件主命令（显示此页面）"
     main_enable: "!!{vc} enable 启用插件（修改并应用配置项config.enabled为True）"
+  handler:
+    disable: 正在禁用适用于Velocity的处理器，此服务器很可能并非代理端！
   loader:
     on_start: 正在启动配置加载器……
     on_disabled: 请先启用此插件，你可以修改配置文件并重载插件，或使用!!vc enable指令

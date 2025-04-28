@@ -1,19 +1,26 @@
 import velocity_helper.runtime as rt
 
 from mcdreforged.api.all import *
+from connect_core.api.interface import PluginControlInterface
 from velocity_helper.config import DefaultConfig
 from velocity_helper.utils import tr
 
 
 builder = SimpleCommandBuilder()
 server = None
+control_server = None
 
 def set_server_for_command(s: PluginServerInterface):
     global server
     server = s
 
+def set_control_server(s: PluginControlInterface):
+    global control_server
+    control_server = s
+
 def command_register(server: PluginServerInterface):
     builder.arg('name', Text)
+    builder.arg('server_id', Text)
     builder.register(server)
 
 @builder.command(f'{rt.commands.prefix}{rt.commands.plugin}')
@@ -45,3 +52,21 @@ def on_command_server(src: CommandSource, ctx: CommandContext):
         return
     server_name = ctx['name']
     server.execute(f"send {src.player} {server_name}")
+
+@builder.command(f'{rt.commands.prefix}{rt.commands.plugin} ping')
+def on_command_ping(src: CommandSource, ctx: CommandContext):
+    if not src.has_permission_higher_than(2):
+        src.reply(tr(server, "permission_denied"))
+        return
+    clients = control_server.get_server_list()
+    for i in clients:
+        control_server.send_data(i, rt.plugin_id, {"message": "Ping!"})
+    src.reply("Ping messages has sent to all clients!")
+
+@builder.command(f'{rt.commands.prefix}{rt.commands.plugin} ping <server_id>')
+def on_command_ping_server(src: CommandSource, ctx: CommandContext):
+    if not src.has_permission_higher_than(2):
+        src.reply(tr(server, "permission_denied"))
+        return
+    control_server.send_data(ctx['server_id'], rt.plugin_id, {"message": "Ping!"})
+    src.reply(f"Ping messages has sent to client {ctx['server_id']}!")

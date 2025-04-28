@@ -5,6 +5,8 @@ velocity_helper:
   command:
     main: "!!{vc} Main command of the plugin. (show this page)"
     main_enable: "!!{vc} enable Enable the plugin. (change and apply option: config.enabled to True)"
+  handler:
+    disable: Disabling handler for velocity, this server may not a proxy!
   loader:
     on_start: Starting config loader...
     on_disabled: Plz enable this plugin by editing the config file and reload, or type !!vc enable instead.
