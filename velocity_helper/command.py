@@ -60,7 +60,9 @@ def on_command_ping(src: CommandSource, ctx: CommandContext):
         return
     clients = control_server.get_server_list()
     for i in clients:
-        control_server.send_data(i, rt.plugin_id, {"message": "Ping!"})
+        self_id = control_server.get_server_id()
+        if i != self_id:
+            control_server.send_data(i, rt.plugin_id, {"message": "Ping!"})
     src.reply("Ping messages has sent to all clients!")
 
 @builder.command(f'{rt.commands.prefix}{rt.commands.plugin} ping <server_id>')
@@ -68,5 +70,11 @@ def on_command_ping_server(src: CommandSource, ctx: CommandContext):
     if not src.has_permission_higher_than(2):
         src.reply(tr(server, "permission_denied"))
         return
-    control_server.send_data(ctx['server_id'], rt.plugin_id, {"message": "Ping!"})
-    src.reply(f"Ping messages has sent to client {ctx['server_id']}!")
+    server_id = ctx['server_id']
+    data = {}
+    if server_id != control_server.get_server_id():
+        data = {"message": "Ping!"}
+    else:
+        data = {"message": "Ping echo!"}
+    control_server.send_data(server_id, rt.plugin_id, data)
+    src.reply(f"Ping messages has sent to client {server_id}!")
