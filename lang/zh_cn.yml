@@ -1,7 +1,7 @@
 velocity_helper:
   check:
     plugin_enabled: 插件已经启用！
-    server_type: 检出server.properties，但此插件仅适用于Velocity代理端！
+    server_type: 检出server.properties，请确保你正在Velocity或其后端使用此插件！
   command:
     main: "!!{vc} 插件主命令（显示此页面）"
     main_enable: "!!{vc} enable 启用插件（修改并应用配置项config.enabled为True）"

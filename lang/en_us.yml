@@ -1,7 +1,7 @@
 velocity_helper:
   check:
     plugin_enabled: Plugin has enabled!
-    server_type: Discovered server.properties, but this plugin is just designed for Velocity proxy server!
+    server_type: Discovered server.properties, plz ensure you are using this plugin in Velocity proxy or its backend server!
   command:
     main: "!!{vc} Main command of the plugin. (show this page)"
     main_enable: "!!{vc} enable Enable the plugin. (change and apply option: config.enabled to True)"
