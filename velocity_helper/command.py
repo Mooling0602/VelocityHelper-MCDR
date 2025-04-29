@@ -51,7 +51,9 @@ def on_command_server(src: CommandSource, ctx: CommandContext):
         src.reply(tr(server, "player_only"))
         return
     server_name = ctx['name']
-    server.execute(f"send {src.player} {server_name}")
+    command = f"send {src.player} {server_name}"
+    if control_server.is_server():
+        server.execute(command)
 
 @builder.command(f'{rt.commands.prefix}{rt.commands.plugin} ping')
 def on_command_ping(src: CommandSource, ctx: CommandContext):

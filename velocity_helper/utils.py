@@ -1,6 +1,6 @@
 import json
 
-from typing import Optional
+from typing import Any, Callable, Optional
 from mcdreforged.api.all import *
 
 
@@ -31,3 +31,15 @@ def load_json(file_path: str) -> dict|list:
 def write_to_json(data: dict|list, file_path: str):
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
+# Usage: @execute_if(lambda: bool | Callable -> bool)
+# Ported from: https://github.com/Mooling0602/MoolingUtils-MCDR/blob/main/mutils/__init__.py
+def execute_if(condition: bool | Callable[[], bool]):
+    def decorator(func: Callable) -> Callable:
+        def wrapper(*args, **kwargs) -> Any:
+            actual_condition = condition() if callable(condition) else condition
+            if actual_condition:
+                return func(*args, **kwargs)
+            return None
+        return wrapper
+    return decorator

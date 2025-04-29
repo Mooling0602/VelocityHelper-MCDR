@@ -30,13 +30,13 @@ def on_load(server: PluginServerInterface, prev_module):
         rt.config = config
     else:
         server.logger.error(tr(server,"loader.on_disabled"))
+    control_server = get_plugin_control_interface(rt.plugin_id, f"{rt.plugin_id}.entry", server)
     from velocity_helper.command import command_register, set_server_for_command, set_control_server
+    set_control_server(control_server)
     set_server_for_command(server)
     command_register(server)
     if register_handler:
         server.register_server_handler(VelocityChatHandler())
-    control_server = get_plugin_control_interface(rt.plugin_id, f"{rt.plugin_id}.entry", server)
-    set_control_server(control_server)
 
 def new_connect(server_list):
     """有新的连接"""
@@ -70,3 +70,6 @@ def recv_data(server_id: str, data: dict):
         case VCHDataType.EXECUTE, "mcdr_command":
             control_server.info(f"Received mcdr command to execute: {vch_data.content}")
             plugin_server.execute_command(vch_data.content)
+        case VCHDataType.EXECUTE, "command":
+            control_server.info(f"Received command to execute in server: {vch_data.content}")
+            plugin_server.execute(vch_data.content)
