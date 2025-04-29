@@ -4,10 +4,11 @@ from mcdreforged.api.all import *
 
 class DefaultConfig(Serializable):
     enabled: bool = False
+    sync_reload: bool = False
 
 class DefaultCommandNodes(Serializable):
     prefix: str = "!!"
-    plugin: str = "vc" # 插件相关
+    plugin: str = "vch" # 插件相关
     server: str = "server" # 相当于/server
     send: str = "send" # 相当于/send，用法和VC端相同
     

@@ -1,17 +1,21 @@
 import os
+import re
 import velocity_helper.runtime as rt
 
 from mcdreforged.api.all import *
 from connect_core.api.mcdr import get_plugin_control_interface
 from velocity_helper.config import config_loader, command_loader
-from velocity_helper.utils import tr
+from velocity_helper.data import VCHData, VCHDataType
+from velocity_helper.utils import tr, load_json, write_to_json
 from velocity_helper.handler import VelocityChatHandler
 
 control_server = None
+plugin_server: PluginServerInterface = None
 
 
 def on_load(server: PluginServerInterface, prev_module):
-    global control_server
+    global control_server, plugin_server
+    plugin_server = server
     register_handler = True
     rt.plugin_id = server.get_self_metadata().id
     rt.server_dir = server.get_mcdr_config().get("working_directory", None)
@@ -44,6 +48,22 @@ def del_connect(server_list):
 
 def recv_data(server_id: str, data: dict):
     control_server.info(f"Received data from server {server_id}.")
-    control_server.info(data.get("message", None))
-
-
+    vch_data = VCHData(**data)
+    match vch_data.type, vch_data.id:
+        case VCHDataType.SEND, "message":
+            plugin_server.broadcast(vch_data.content)
+        case VCHDataType.REQUEST, "bind":
+            path = os.path.join(plugin_server.get_data_folder(), "binds.json")
+            name = vch_data.content
+            bind_data = []
+            if os.path.exists(path):
+                bind_data = load_json(path)
+            for item in bind_data.copy():
+                if item.get(server_id, None) is not None:
+                    bind_data.remove(item)
+            if name is not None:
+                bind_data.append({server_id: name})
+            else:
+                control_server.error(f"bound server {server_id} failed due to invalid name!")
+            write_to_json(bind_data, path)
+            control_server.info(f"bound server {server_id} with friendly name {name}.")

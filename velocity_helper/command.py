@@ -7,7 +7,7 @@ from velocity_helper.utils import tr
 
 
 builder = SimpleCommandBuilder()
-server = None
+server: PluginServerInterface = None
 control_server = None
 
 def set_server_for_command(s: PluginServerInterface):
@@ -62,7 +62,13 @@ def on_command_ping(src: CommandSource, ctx: CommandContext):
     for i in clients:
         self_id = control_server.get_server_id()
         if i != self_id:
-            control_server.send_data(i, rt.plugin_id, {"message": "Ping!"})
+            control_server.send_data(
+                i, rt.plugin_id, {
+                    "id": "message",
+                    "type": "send",
+                    "content": "Ping!"
+                }
+            )
     src.reply("Ping messages has sent to all clients!")
 
 @builder.command(f'{rt.commands.prefix}{rt.commands.plugin} ping <server_id>')
@@ -73,8 +79,34 @@ def on_command_ping_server(src: CommandSource, ctx: CommandContext):
     server_id = ctx['server_id']
     data = {}
     if server_id != control_server.get_server_id():
-        data = {"message": "Ping!"}
+        data = {
+            "id": "message",
+            "type": "send",
+            "content": "Ping!"
+        }
     else:
-        data = {"message": "Ping echo!"}
+        data = {
+            "id": "message",
+            "type": "send",
+            "content": "Ping echo!"
+        }
     control_server.send_data(server_id, rt.plugin_id, data)
     src.reply(f"Ping messages has sent to client {server_id}!")
+
+@builder.command(f'{rt.commands.prefix}{rt.commands.plugin} bind <name>')
+def on_command_bind_server(src: CommandSource, ctx: CommandContext):
+    if not src.has_permission(4):
+        src.reply(tr(server, "permission_denied"))
+        return
+    self_id = control_server.get_server_id()
+    data = {
+        "id": "bind",
+        "type": "request",
+        "content": ctx['name']
+    }
+    for i in control_server.get_server_list():
+        if i != self_id:
+            control_server.send_data(i, rt.plugin_id, data)
+    if control_server.is_server() is False:
+        control_server.send_data("-----", rt.plugin_id, data)
+    src.reply("bind requests has been sent to all other clients!")
