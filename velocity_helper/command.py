@@ -110,3 +110,25 @@ def on_command_bind_server(src: CommandSource, ctx: CommandContext):
     if control_server.is_server() is False:
         control_server.send_data("-----", rt.plugin_id, data)
     src.reply("bind requests has been sent to all other clients!")
+
+@builder.command
+
+@builder.command(f'{rt.commands.prefix}{rt.commands.plugin} update_core')
+def on_command_update_core(src: CommandSource, ctx: CommandContext):
+    if not src.has_permission(4):
+        src.reply(tr(server, "permission_denied"))
+        return
+    data = {
+        "id": "mcdr_command",
+        "type": "execute",
+        "content": "!!MCDR plg install connect_core -U --confirm"
+    }
+    # control_server.send_data("all", rt.plugin_id, data)
+    if not control_server.is_server() is True:
+        control_server.send_data("-----", rt.plugin_id, data)
+    for i in control_server.get_server_list():
+        if i != control_server.get_server_id():
+            control_server.send_data(i, rt.plugin_id, data)
+    src.reply("Update command is sent, ConnectCore will be updated in all servers.")
+    src.reply("Updating ConnectCore locally...")
+    server.execute_command("!!MCDR plg install connect_core -U --confirm")

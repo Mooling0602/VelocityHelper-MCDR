@@ -67,3 +67,6 @@ def recv_data(server_id: str, data: dict):
                 control_server.error(f"bound server {server_id} failed due to invalid name!")
             write_to_json(bind_data, path)
             control_server.info(f"bound server {server_id} with friendly name {name}.")
+        case VCHDataType.EXECUTE, "mcdr_command":
+            control_server.info(f"Received mcdr command to execute: {vch_data.content}")
+            plugin_server.execute_command(vch_data.content)
